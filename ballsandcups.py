@@ -88,13 +88,13 @@ def getBall(frame, hsv):
 def ballInCup(center, radius, cup):
 	print center
 	print cup
-	minX = cup[0][0] - cup[1][0]
-	maxX = cup[0][0] + cup[1][0]
-	minY = cup[0][1] - cup[1][1]
-	maxY = cup[0][1] + cup[1][1]
-	if minX <= center[0] <= maxX:
-		if minY <= center[0] <= maxY:
-			return True
+	x = cup[0][0]
+	w = cup[1][0]
+	y = cup[0][1]
+	h = cup[1][1]
+	print (center[0] - x)**2/w**2 + (center[1] - y)**2/h**2
+	if (center[0] - x)**2/w**2 + (center[1] - y)**2/h**2 <= 1.2: 
+		return True
 	return False
 
 
