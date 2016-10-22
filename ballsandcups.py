@@ -37,6 +37,18 @@ def getCups(frame, hsv):
 				cv2.ellipse(frame,ellipse,(0,255,0),2)
 	return l
 
+# returns a list of cup centers for ui use
+def cupLocations():
+	_, frame = camera.read()
+	frame = imutils.resize(frame, width=600)
+	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+	cups = getCups(frame, hsv)
+	l = []
+	for cup in cups:
+		l.append(cup.x + 0.5 * cup.width, cup.y + 0.5 * cup.height)
+	return l
+
+
 # returns the center, radius of the ball if it's in frame, None otherwise
 # also draws ball circle
 def getBall(frame, hsv):
