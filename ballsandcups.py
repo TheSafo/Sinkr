@@ -145,6 +145,20 @@ def throwBall():
 		center = pts.popleft()
 		radius = rads.popleft()
 
+	# getting list of last for frames. Will check to see if 2 are within a ellipse
+	# in the list returned by getCups
+	clist = [center]
+	rlist = [radius]
+	while len(clist) < 4:
+		center = pts.popleft()
+		if center is not None:
+			clist.append(center)
+			rlist.append(rads.popleft())
+		else:
+			rads.popleft()
+
+
+
 throwBall()
 
 camera.release()
