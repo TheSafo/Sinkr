@@ -1,5 +1,5 @@
 from Tkinter import *
-import ballsandcups
+#import ballsandcups
 
 
 class Gui(Frame):
