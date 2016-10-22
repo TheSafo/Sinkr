@@ -108,10 +108,10 @@ def throwBall(numleft):
 	cups = deque()
 	while len(cups) != numleft:
 		_, frame = camera.read()
-		#frame = imutils.resize(frame, width=600)
-		#hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-		#cups = getCups(frame, hsv)
-		cups = getCups2(frame, "/memes/classifier/stage7.xml")
+		frame = imutils.resize(frame, width=600)
+		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+		cups = getCups(frame, hsv)
+		#cups = getCups2(frame, "/memes/classifier/stage7.xml")
 
 	while framecount < 5:
 		_, frame = camera.read()
