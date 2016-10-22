@@ -27,7 +27,7 @@ class Gui(Frame):
 def main():
     root = Tk()
     ex = Gui(root)
-    root.geometry("330x220")
+    root.geometry("990x660")
     ex.parent.configure(background = 'black')
     root.mainloop()
 
