@@ -1,6 +1,8 @@
 from Tkinter import *
-import ballsandcups
+#import ballsandcups
 
+width = 990
+height = 660
 
 class Gui(Frame):
     def __init__(self, parent):
@@ -15,11 +17,16 @@ class Gui(Frame):
         canvas = Canvas(self)
         canvas.configure(background = 'black', highlightbackground = 'black')
 
+        c_width = 60
+        c_height = c_width
+
         for i in range (0, 4):
             for j in range (0, 4-i):
-                x_pos = 10 + 30 * j + 15 * i
-                y_pos = 30 + 28 * i
-                canvas.create_oval(x_pos, y_pos, x_pos + 30, y_pos + 30,
+                x_pos = c_width * j
+                y_pos = c_height * i
+                # x_pos = 10 + c_width * j + 15 * i
+                # y_pos = 30 + c_height * i
+                canvas.create_oval(x_pos, y_pos, x_pos + c_width, y_pos + c_height,
                   outline="white", fill="red", width=2)
         canvas.pack()
 
@@ -27,7 +34,7 @@ class Gui(Frame):
 def main():
     root = Tk()
     ex = Gui(root)
-    root.geometry("330x220")
+    root.geometry(str(width) + "x" + str(height))
     ex.parent.configure(background = 'black')
     root.mainloop()
 
