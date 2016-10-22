@@ -1,0 +1,11 @@
+./positive_images/IMG_1479.JPG
+./positive_images/IMG_1480.JPG
+./positive_images/IMG_1481.JPG
+./positive_images/IMG_1482.JPG
+./positive_images/IMG_1483.JPG
+./positive_images/IMG_1484.JPG
+./positive_images/IMG_1485.JPG
+./positive_images/IMG_1486.JPG
+./positive_images/IMG_1487.JPG
+./positive_images/IMG_1488.JPG
+./positive_images/IMG_1489.JPG
