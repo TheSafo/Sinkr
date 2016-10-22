@@ -15,7 +15,6 @@ camera = cv2.VideoCapture(0)
 # returns a deque of ellipses representing cup borders and draws the ellipses
 def getCups(frame, hsv):
 	mask = cv2.inRange(hsv, cupLower, cupUpper)
-	cv2.imshow("Frame2", mask)
 	mask = cv2.erode(mask, None, iterations=2)
 	mask = cv2.dilate(mask, None, iterations=2)
 	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
