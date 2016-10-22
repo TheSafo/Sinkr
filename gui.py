@@ -1,6 +1,8 @@
 from Tkinter import *
 #import ballsandcups
 
+width = 990
+height = 660
 
 class Gui(Frame):
     def __init__(self, parent):
@@ -27,7 +29,7 @@ class Gui(Frame):
 def main():
     root = Tk()
     ex = Gui(root)
-    root.geometry("990x660")
+    root.geometry(str(width) + "x" + str(height))
     ex.parent.configure(background = 'black')
     root.mainloop()
 
