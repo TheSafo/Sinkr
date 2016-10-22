@@ -12,7 +12,7 @@ cupUpper = (42, 30, 200)
 
 camera = cv2.VideoCapture(0)
 
-# returns a deque of ellipses representing cup borders and draws the ellipses
+# returns a list of tuples representing cups(x, y, width, height) and draws the ellipses
 def getCups(frame, hsv):
 	mask = cv2.inRange(hsv, cupLower, cupUpper)
 	mask = cv2.erode(mask, None, iterations=2)
@@ -60,11 +60,27 @@ def getBall(frame, hsv):
 			return (center, radius)
 	return None, None
 
+def ballInCup(center, radius, cup):
+	minX = cup.x
+	maxX = cup.x + cup.width
+	minY = cup.y 
+	maxY = cup.y + cup.height
+	if minX <= center[0] <= maxX:
+		if minY <= center[0] <= maxY:
+			return True
+	return False
+
+
 def throwBall():
 	framecount = 0
 	
 	pts = deque()
 	rads = deque()
+
+	_, frame = camera.read()
+	frame = imutils.resize(frame, width=600)
+	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+	cups = getCups(frame, hsv)
 	
 	while framecount < 5:
 		_, frame = camera.read()
@@ -79,8 +95,6 @@ def throwBall():
 			framecount = 0
 		else:
 			framecount += 1
-
-		getCups(frame, hsv)
 
 		# traces ball movement
 		maxtrace = len(pts)
@@ -157,7 +171,15 @@ def throwBall():
 		else:
 			rads.popleft()
 
+	score = 0
+	for i in range(4):
+		for cup in cups:
+			if ballInCup(clist[i], rlist[i], cup):
+				score += 1
 
+	if score >= 2:
+		return True
+	return False
 
 throwBall()
 
