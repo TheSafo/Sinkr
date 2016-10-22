@@ -7,14 +7,15 @@ import cv2
 
 ballLower = (29, 86, 6)
 ballUpper = (64, 255, 255)
-cupLower = (11.5, 8, 0)
-cupUpper = (42, 30, 200)
+cupLower = (101, 193.8, 114.75)
+cupUpper = (120, 255, 255)
 
 camera = cv2.VideoCapture(0)
 
 # returns a list of tuples representing cups(x, y, width, height) and draws the ellipses
 def getCups(frame, hsv):
 	mask = cv2.inRange(hsv, cupLower, cupUpper)
+	cv2.imshow("Frame2", mask)
 	mask = cv2.erode(mask, None, iterations=2)
 	mask = cv2.dilate(mask, None, iterations=2)
 	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
@@ -35,7 +36,19 @@ def getCups(frame, hsv):
 				ellipse = cv2.fitEllipse(cupContour)
 				l.append(ellipse)
 				cv2.ellipse(frame,ellipse,(0,255,0),2)
+				cv2.imshow("Frame", frame)
 	return l
+
+# Just like getcups, but with ML. IT WILL FAIL IF THE FILE IS INVALID, I DONT ERROR CHECK
+# returns a list, not a deque
+def getCups2(frame, filename):
+	cascade = cv2.CascadeClassifier(filename)
+	cups = cascade.detectMultiScale(frame)
+	for (x, y, w, h) in cups:
+		center = (x + 0.5*w, y + 0.5*h)
+		cv2.ellipse(frame, ((x,y), (w,h), 0), (0,255,0),2)
+	return cups
+
 
 # returns a list of cup centers for ui use
 def cupLocations():
@@ -73,32 +86,36 @@ def getBall(frame, hsv):
 	return None, None
 
 def ballInCup(center, radius, cup):
-	minX = cup.x
-	maxX = cup.x + cup.width
-	minY = cup.y 
-	maxY = cup.y + cup.height
+	print center
+	print cup
+	minX = cup[0][0] - cup[1][0]
+	maxX = cup[0][0] + cup[1][0]
+	minY = cup[0][1] - cup[1][1]
+	maxY = cup[0][1] + cup[1][1]
 	if minX <= center[0] <= maxX:
 		if minY <= center[0] <= maxY:
 			return True
 	return False
 
 
-def throwBall():
+def throwBall(numleft):
 	framecount = 0
 	
 	pts = deque()
 	rads = deque()
 
-	_, frame = camera.read()
-	frame = imutils.resize(frame, width=600)
-	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-	cups = getCups(frame, hsv)
+	cups = deque()
+	while len(cups) != numleft:
+		_, frame = camera.read()
+		frame = imutils.resize(frame, width=600)
+		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+		cups = getCups(frame, hsv)
 	
 	while framecount < 5:
 		_, frame = camera.read()
 		frame = imutils.resize(frame, width=600)
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
+		getCups(frame, hsv)
 		center, radius = getBall(frame, hsv)
 		pts.appendleft(center)
 		rads.appendleft(radius)
@@ -134,7 +151,6 @@ def throwBall():
 		_, frame = camera.read()
 		frame = imutils.resize(frame, width=600)
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
 		center, radius = getBall(frame, hsv)
 		pts.appendleft(center)
 		rads.appendleft(radius)
@@ -143,8 +159,6 @@ def throwBall():
 			framecount += 1
 		else:
 			framecount = 0
-
-		getCups(frame, hsv)
 
 		# traces ball movement
 		maxtrace = len(pts)
@@ -175,6 +189,7 @@ def throwBall():
 	# in the list returned by getCups
 	clist = [center]
 	rlist = [radius]
+
 	while len(clist) < 4:
 		center = pts.popleft()
 		if center is not None:
@@ -186,14 +201,15 @@ def throwBall():
 	score = 0
 	for i in range(4):
 		for cup in cups:
+			print cup
 			if ballInCup(clist[i], rlist[i], cup):
 				score += 1
 
-	if score >= 2:
+	if score >= 1:
 		return True
 	return False
 
-throwBall()
+print throwBall(1)
 
 camera.release()
 cv2.destroyAllWindows()
