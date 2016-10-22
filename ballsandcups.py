@@ -42,18 +42,19 @@ def getCups(frame, hsv):
 # Just like getcups, but with ML. IT WILL FAIL IF THE FILE IS INVALID, I DONT ERROR CHECK
 # returns a list, not a deque
 def getCups2(frame, filename):
-	cascade = cv2.CascadeClassifier(filename)
+	cascade = cv2.CascadeClassifier()
+	cascade.load(filename)
 	cups = cascade.detectMultiScale(frame)
 	for (x, y, w, h) in cups:
 		center = (x + 0.5*w, y + 0.5*h)
-		cv2.ellipse(frame, ((x,y), (w,h), 0), (0,255,0),2)
+		cv2.ellipse(frame, ((x,y), (w,h), 90), (0,255,0),2)
 	return cups
 
 
 # returns a list of cup centers for ui use
 def cupLocations():
 	_, frame = camera.read()
-	frame = imutils.resize(frame, width=600)
+	#frame = imutils.resize(frame, width=600)
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 	cups = getCups(frame, hsv)
 	l = []
@@ -107,13 +108,14 @@ def throwBall(numleft):
 	cups = deque()
 	while len(cups) != numleft:
 		_, frame = camera.read()
-		frame = imutils.resize(frame, width=600)
-		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-		cups = getCups(frame, hsv)
-	
+		#frame = imutils.resize(frame, width=600)
+		#hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+		#cups = getCups(frame, hsv)
+		cups = getCups2(frame, "/memes/classifier/stage7.xml")
+
 	while framecount < 5:
 		_, frame = camera.read()
-		frame = imutils.resize(frame, width=600)
+		#frame = imutils.resize(frame, width=600)
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		getCups(frame, hsv)
 		center, radius = getBall(frame, hsv)
@@ -149,7 +151,7 @@ def throwBall(numleft):
 
 	while framecount < 20:
 		_, frame = camera.read()
-		frame = imutils.resize(frame, width=600)
+		#frame = imutils.resize(frame, width=600)
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		center, radius = getBall(frame, hsv)
 		pts.appendleft(center)
@@ -190,7 +192,8 @@ def throwBall(numleft):
 	clist = [center]
 	rlist = [radius]
 
-	while len(clist) < 4:
+	n = 2 #the last n frames to check
+	while len(clist) < n:
 		center = pts.popleft()
 		if center is not None:
 			clist.append(center)
@@ -199,7 +202,7 @@ def throwBall(numleft):
 			rads.popleft()
 
 	score = 0
-	for i in range(4):
+	for i in range(n):
 		for cup in cups:
 			print cup
 			if ballInCup(clist[i], rlist[i], cup):
