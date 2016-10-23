@@ -12,7 +12,7 @@ def main():
     gameId = random.randint(100000, 999999)
 
     # dicts for db
-    cups = {x:(None, None) for x in range(0, 6)}
+    cups = {x:{'x':0,'y':0} for x in range(0, 6)}
     players = {x:'' for x in range(0,2)}
 
     # initial db setup
@@ -27,5 +27,6 @@ def main():
     # main loop
     while (len(cups) > 0):
         pass
+
 if __name__ == '__main__':
     main()
