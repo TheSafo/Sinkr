@@ -40,6 +40,8 @@ def main():
         print "miss"
         turn ^= 1
         fb.put('/games/' + str(gameId), 'turn', turn)
+    fb.put('leaderboard', players[0], scores[0])
+    fb.put('leaderboard', players[1], scores[1])
 
 
 if __name__ == '__main__':
