@@ -59,7 +59,7 @@ def cupLocations(numleft):
 	cups = getCups(frame, hsv)
 	l = []
 	for cup in cups:
-		l.append(cup[0][0] + cup[1][0], cup[0][1] + 0.5 up[1][1])
+		l.append(cup[0][0] + cup[1][0], cup[0][1] + cup[1][1])
 	return l
 
 
@@ -87,18 +87,12 @@ def getBall(frame, hsv):
 	return None, None
 
 def ballInCup(center, radius, cup):
-	print "center"
-	print center
-	print "radius"
-	print radius
-	print "cup"
-	print cup
 	x = cup[0][0]
 	w = cup[1][0]
 	y = cup[0][1]
 	h = cup[1][1]
-	#print (center[0] - x)**2/w**2 + (center[1] - y)**2/h**2
-	if ((center[0] - x)**2/(1*w)**2 + (center[1] - y)**2/(1*h)**2) <= 10:
+	print ((center[0] - x)**2/(2*w)**2 + (center[1] - y)**2/(2*h)**2)
+	if ((center[0] - x)**2/(2*w)**2 + (center[1] - y)**2/(2*h)**2) <= 4:
 		return True
 	return False
 
@@ -207,23 +201,19 @@ def throwBall(numleft):
 		else:
 			rads.popleft()
 
-	score = 0
 	for i in range(n):
 		for cup in cups:
 			if ballInCup(clist[i], rlist[i], cup):
-				return (cup[0][0]+0.5*cup[1][0], cup[0][1]+0.5*cup[1][1])
+				return (cup[0][0]+cup[1][0], cup[0][1]+cup[1][1])
 	return (None, None)
 
-<<<<<<< HEAD
-print throwBall(1)
-=======
-	if score >= 1:
-		return True
-	return False
+#<<<<<<< HEAD
+print throwBall(3)
+# =======
 
-if __name__ == '__main__':
-	print throwBall(6)
->>>>>>> 22c95259547d300327ec3817a9fb3f67766469dd
+# if __name__ == '__main__':
+# 	print throwBall(6)
+# >>>>>>> 22c95259547d300327ec3817a9fb3f67766469dd
 
-	camera.release()
-	cv2.destroyAllWindows()
+camera.release()
+cv2.destroyAllWindows()
