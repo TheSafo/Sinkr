@@ -59,7 +59,7 @@ def cupLocations(numleft):
 	cups = getCups(frame, hsv)
 	l = []
 	for cup in cups:
-		l.append(cup[0][0] + cup[1][0], cup[0][1] + cup[1][1])
+		l.append((cup[0][0] + cup[1][0], cup[0][1] + cup[1][1]))
 	return l
 
 
