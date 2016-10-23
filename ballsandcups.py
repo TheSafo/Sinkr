@@ -15,7 +15,6 @@ camera = cv2.VideoCapture(0)
 # returns a list of tuples representing cups(x, y, width, height) and draws the ellipses
 def getCups(frame, hsv):
 	mask = cv2.inRange(hsv, cupLower, cupUpper)
-	cv2.imshow("Frame2", mask)
 	mask = cv2.erode(mask, None, iterations=2)
 	mask = cv2.dilate(mask, None, iterations=2)
 	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
@@ -32,34 +31,35 @@ def getCups(frame, hsv):
 		c = sorted(cnts, key=cv2.contourArea)[-numCups:]
 
 		for cupContour in c:
-			if cv2.contourArea(cupContour) > 1000:
+			if 200 < cv2.contourArea(cupContour) < 1500:
 				ellipse = cv2.fitEllipse(cupContour)
 				l.append(ellipse)
 				cv2.ellipse(frame,ellipse,(0,255,0),2)
 				cv2.imshow("Frame", frame)
+				cv2.waitKey(1)
 	return l
 
 # Just like getcups, but with ML. IT WILL FAIL IF THE FILE IS INVALID, I DONT ERROR CHECK
 # returns a list, not a deque
-def getCups2(frame, filename):
-	cascade = cv2.CascadeClassifier()
-	cascade.load(filename)
-	cups = cascade.detectMultiScale(frame)
-	for (x, y, w, h) in cups:
-		center = (x + 0.5*w, y + 0.5*h)
-		cv2.ellipse(frame, ((x,y), (w,h), 90), (0,255,0),2)
-	return cups
-
+# def getCups2(frame, filename):
+# 	cascade = cv2.CascadeClassifier()
+# 	cascade.load(filename)
+# 	cups = cascade.detectMultiScale(frame)
+# 	for (x, y, w, h) in cups:
+# 		center = (x + 0.5*w, y + 0.5*h)
+# 		cv2.ellipse(frame, ((x,y), (w,h), 90), (0,255,0),2)
+# 	return cups
 
 # returns a list of cup centers for ui use
-def cupLocations():
+def cupLocations(numleft):
 	_, frame = camera.read()
+	frame = frame[0:1080, 240:840]
 	#frame = imutils.resize(frame, width=600)
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 	cups = getCups(frame, hsv)
 	l = []
 	for cup in cups:
-		l.append(cup.x + 0.5 * cup.width, cup.y + 0.5 * cup.height)
+		l.append(cup[0][0], cup[0][1], cup[1][0], cup[1][1])
 	return l
 
 
@@ -87,17 +87,20 @@ def getBall(frame, hsv):
 	return None, None
 
 def ballInCup(center, radius, cup):
+	print "center"
 	print center
+	print "radius" 
+	print radius
+	print "cup" 
 	print cup
 	x = cup[0][0]
 	w = cup[1][0]
 	y = cup[0][1]
 	h = cup[1][1]
-	print (center[0] - x)**2/w**2 + (center[1] - y)**2/h**2
-	if (center[0] - x)**2/w**2 + (center[1] - y)**2/h**2 <= 1.2: 
+	#print (center[0] - x)**2/w**2 + (center[1] - y)**2/h**2
+	if ((center[0] - x)**2/(1*w)**2 + (center[1] - y)**2/(1*h)**2) <= 10: 
 		return True
 	return False
-
 
 def throwBall(numleft):
 	framecount = 0
@@ -108,13 +111,15 @@ def throwBall(numleft):
 	cups = deque()
 	while len(cups) != numleft:
 		_, frame = camera.read()
-		frame = imutils.resize(frame, width=600)
+		frame = frame[0:1080, 240:840]
+		#frame = imutils.resize(frame, width=600)
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		cups = getCups(frame, hsv)
 		#cups = getCups2(frame, "/memes/classifier/stage7.xml")
 
-	while framecount < 5:
+	while framecount < 3:
 		_, frame = camera.read()
+		frame = frame[0:1080, 240:840]
 		#frame = imutils.resize(frame, width=600)
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		getCups(frame, hsv)
@@ -151,6 +156,7 @@ def throwBall(numleft):
 
 	while framecount < 20:
 		_, frame = camera.read()
+		frame = frame[0:1080, 240:840]
 		#frame = imutils.resize(frame, width=600)
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		center, radius = getBall(frame, hsv)
@@ -204,7 +210,6 @@ def throwBall(numleft):
 	score = 0
 	for i in range(n):
 		for cup in cups:
-			print cup
 			if ballInCup(clist[i], rlist[i], cup):
 				score += 1
 
@@ -212,7 +217,7 @@ def throwBall(numleft):
 		return True
 	return False
 
-print throwBall(1)
+print throwBall(6)
 
 camera.release()
 cv2.destroyAllWindows()
