@@ -30,12 +30,14 @@ def main():
     # main loop
     while (len(cups) > 0):
         if throwBall(cupsleft) != (None, None):
+            print "hit"
             cupsleft -= 1
             scores[turn] += 1
             fb.delete('/games/' + str(gameId), 'cups')
             cups = {i:{'x':x, 'y':y} for i in range(0, cupsleft) for (x,y) in cupLocations(cupsleft)}
             fb.put('/games/' + str(gameId), 'cups', cups)
             fb.put('/games/' + str(gameId), 'scores', scores)
+        print "miss"
         turn ^= 1
         fb.put('/games/' + str(gameId), 'turn', turn)
 
