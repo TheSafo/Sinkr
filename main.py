@@ -7,12 +7,13 @@ from time import sleep
 def main():
 
     # variables
+    cupsleft = 6
     turn = 0
     fb = firebase.FirebaseApplication("https://sinkr-1dbdd.firebaseio.com/", None)
     gameId = random.randint(100000, 999999)
 
     # dicts for db
-    cups = {x:{'x':0,'y':0} for x in range(0, 6)}
+    cups = {x:y for x in range(0, 6) for y in cupLocations(cupsleft)}
     players = {x:'' for x in range(0,2)}
 
     # initial db setup
@@ -25,8 +26,8 @@ def main():
         sleep(1)
 
     # main loop
-    while (len(cups) > 0):
-        pass
+   # while (len(cups) > 0):
+
 
 if __name__ == '__main__':
     main()
