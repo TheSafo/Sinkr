@@ -7,7 +7,7 @@ import cv2
 
 ballLower = (29, 86, 6)
 ballUpper = (64, 255, 255)
-cupLower = (101, 193.8, 114.75)
+cupLower = (101, 193.8, 100)
 cupUpper = (120, 255, 255)
 
 camera = cv2.VideoCapture(0)
@@ -59,7 +59,7 @@ def cupLocations(numleft):
 	cups = getCups(frame, hsv)
 	l = []
 	for cup in cups:
-		l.append(cup[0][0], cup[0][1], cup[1][0], cup[1][1])
+		l.append(cup[0][0] + 0.5 * cup[1][0], cup[0][1] + 0.5 * cup[1][1])
 	return l
 
 
@@ -211,13 +211,10 @@ def throwBall(numleft):
 	for i in range(n):
 		for cup in cups:
 			if ballInCup(clist[i], rlist[i], cup):
-				score += 1
+				return (cup[0][0]+0.5*cup[1][0], cup[0][1]+0.5*cup[1][1]) 
+	return (None, None)
 
-	if score >= 1:
-		return True
-	return False
-
-print throwBall(6)
+print throwBall(1)
 
 camera.release()
 cv2.destroyAllWindows()
