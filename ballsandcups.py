@@ -59,7 +59,7 @@ def cupLocations(numleft):
 	cups = getCups(frame, hsv)
 	l = []
 	for cup in cups:
-		l.append(cup[0][0] + 0.5 * cup[1][0], cup[0][1] + 0.5 * cup[1][1])
+		l.append(cup[0][0] + cup[1][0], cup[0][1] + 0.5 up[1][1])
 	return l
 
 
@@ -211,7 +211,7 @@ def throwBall(numleft):
 	for i in range(n):
 		for cup in cups:
 			if ballInCup(clist[i], rlist[i], cup):
-				return (cup[0][0]+0.5*cup[1][0], cup[0][1]+0.5*cup[1][1]) 
+				return (cup[0][0]+0.5*cup[1][0], cup[0][1]+0.5*cup[1][1])
 	return (None, None)
 
 <<<<<<< HEAD
