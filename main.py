@@ -13,7 +13,7 @@ def main():
     gameId = random.randint(100000, 999999)
 
     # dicts for db
-    cups = {i:{'x':x, 'y';y} for i in range(0, 6) for (x,y) in cupLocations(cupsleft)}
+    cups = {i:{'x':x, 'y':y} for i in range(0, 6) for (x,y) in cupLocations(cupsleft)}
     players = {x:'' for x in range(0,2)}
 
     # initial db setup
