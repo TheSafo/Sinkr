@@ -26,7 +26,7 @@ def getCups(frame, hsv):
 		# get 10 highest contours for now, will eventually be a variable
 		# representing number left
 		numCups = 10
-		if len(cnts) < 10: 
+		if len(cnts) < 10:
 			numCups = len(cnts)
 		c = sorted(cnts, key=cv2.contourArea)[-numCups:]
 
@@ -89,22 +89,22 @@ def getBall(frame, hsv):
 def ballInCup(center, radius, cup):
 	print "center"
 	print center
-	print "radius" 
+	print "radius"
 	print radius
-	print "cup" 
+	print "cup"
 	print cup
 	x = cup[0][0]
 	w = cup[1][0]
 	y = cup[0][1]
 	h = cup[1][1]
 	#print (center[0] - x)**2/w**2 + (center[1] - y)**2/h**2
-	if ((center[0] - x)**2/(1*w)**2 + (center[1] - y)**2/(1*h)**2) <= 10: 
+	if ((center[0] - x)**2/(1*w)**2 + (center[1] - y)**2/(1*h)**2) <= 10:
 		return True
 	return False
 
 def throwBall(numleft):
 	framecount = 0
-	
+
 	pts = deque()
 	rads = deque()
 
@@ -217,7 +217,8 @@ def throwBall(numleft):
 		return True
 	return False
 
-print throwBall(6)
+if __name__ == '__main__':
+	print throwBall(6)
 
-camera.release()
-cv2.destroyAllWindows()
+	camera.release()
+	cv2.destroyAllWindows()
