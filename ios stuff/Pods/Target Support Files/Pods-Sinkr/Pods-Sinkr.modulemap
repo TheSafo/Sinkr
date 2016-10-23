@@ -1,0 +1,6 @@
+framework module Pods_Sinkr {
+  umbrella header "Pods-Sinkr-umbrella.h"
+
+  export *
+  module * { export * }
+}
