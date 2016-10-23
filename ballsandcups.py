@@ -52,11 +52,14 @@ def getCups(frame, hsv):
 
 # returns a list of cup centers for ui use
 def cupLocations(numleft):
-	_, frame = camera.read()
-	frame = frame[0:1080, 240:840]
-	#frame = imutils.resize(frame, width=600)
-	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-	cups = getCups(frame, hsv)
+	cups = []
+	while len(cups) != numleft:
+		_, frame = camera.read()
+		frame = frame[0:1080, 240:840]
+		#frame = imutils.resize(frame, width=600)
+		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+		cups = getCups(frame, hsv)
+		
 	l = []
 	for cup in cups:
 		l.append((cup[0][0] + cup[1][0], cup[0][1] + cup[1][1]))
