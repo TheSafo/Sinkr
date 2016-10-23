@@ -207,6 +207,7 @@ def throwBall(numleft):
 				return (cup[0][0]+cup[1][0], cup[0][1]+cup[1][1])
 	return (None, None)
 
-print throwBall(3)
-camera.release()
-cv2.destroyAllWindows()
+if __name__ == '__main__':
+	print throwBall(3)
+	camera.release()
+	cv2.destroyAllWindows()
