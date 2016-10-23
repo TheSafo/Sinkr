@@ -32,7 +32,7 @@ def main():
         if throwBall(cupsleft) != (None, None):
             cupsleft -= 1
             scores[turn] += 1
-            fb.remove('/games/' + str(gameId), 'cups')
+            fb.delete('/games/' + str(gameId), 'cups')
             cups = {i:{'x':x, 'y':y} for i in range(0, cupsleft) for (x,y) in cupLocations(cupsleft)}
             fb.put('/games/' + str(gameId), 'cups', cups)
             fb.put('/games/' + str(gameId), 'scores', scores)
